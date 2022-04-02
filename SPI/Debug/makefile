@@ -60,8 +60,8 @@ all: main-build
 main-build: STM32-SPI-C.elf secondary-outputs
 
 # Tool invocations
-STM32-SPI-C.elf: $(OBJS) $(USER_OBJS) /Users/MarkSherstan/Documents/GitHub/MPU-6050-9250-I2C-CompFilter/STM32/SPI/STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "STM32-SPI-C.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/MarkSherstan/Documents/GitHub/MPU-6050-9250-I2C-CompFilter/STM32/SPI/STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32-SPI-C.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+STM32-SPI-C.elf: $(OBJS) $(USER_OBJS) /Users/MarkSherstan/Documents/GitHub/STM32-MPU6050-MPU9250-I2C-SPI/SPI/STM32F401RETX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "STM32-SPI-C.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m4 -T"/Users/MarkSherstan/Documents/GitHub/STM32-MPU6050-MPU9250-I2C-SPI/SPI/STM32F401RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="STM32-SPI-C.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
