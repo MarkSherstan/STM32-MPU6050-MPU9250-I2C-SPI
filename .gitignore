@@ -5,3 +5,7 @@
 *.bin
 *.list
 *.map
+*.su
+
+SPI/Release 
+SPI/Debug
