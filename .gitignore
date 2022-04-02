@@ -1,3 +1,6 @@
 .DS_Store
 *.o 
 *.d
+*.elf
+*.bin
+*.list
