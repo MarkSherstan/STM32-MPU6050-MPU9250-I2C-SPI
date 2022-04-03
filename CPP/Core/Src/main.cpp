@@ -25,7 +25,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "MPU9250.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -35,6 +35,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define TRUE  1
+#define FALSE 0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,7 +58,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+MPU9250 imu(&hspi1, GFSR_500DPS, AFSR_4G);
 /* USER CODE END 0 */
 
 /**
@@ -91,7 +93,7 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
-
+  imu.begin();
   /* USER CODE END 2 */
 
   /* Infinite loop */

@@ -7,8 +7,15 @@
 
 #include "MPU9250.h"
 
-MPU9250::MPU9250() {
-	// TODO Auto-generated constructor stub
-
+MPU9250::MPU9250(SPI_HandleTypeDef *pSPI, uint8_t aFSR, uint8_t gFSR)
+{
+    _pSPI = pSPI;
+    _aFSR = aFSR;
+    _gFSR = gFSR;
 }
 
+
+uint8_t MPU9250::begin()
+{
+    return 0;
+}
