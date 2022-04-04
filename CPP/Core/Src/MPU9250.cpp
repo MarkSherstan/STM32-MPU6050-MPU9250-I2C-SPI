@@ -19,13 +19,12 @@ MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin,
 
 uint8_t MPU9250::begin()
 {
-    MPU9250::toggleCS();
     return 0;
 }
 
 
 /// @brief Toggle CS state to either start or end transmissions (default = high)
-void toggleCS()
+void MPU9250::toggleCS()
 {
     HAL_GPIO_TogglePin(_pCSport, _CSpin);
 }
