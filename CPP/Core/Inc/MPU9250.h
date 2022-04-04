@@ -55,15 +55,17 @@ private:
     // void REG_WRITE(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t *pAddr, uint8_t *pVal);
     // void setGyroFullScaleRange(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t gScale);
     // void setAccFullScaleRange(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t aScale);
-    // void CS(MPU9250_t *pMPU9250, uint8_t state);
+    void toggleCS();
 
     // Variables
-    SPI_HandleTypeDef *_pSPI;
+    SPI_HandleTypeDef* _pSPI;
+    GPIO_TypeDef* _pCSport;
     uint8_t _aFSR, _gFSR;
+    uint16_t _CSpin;
 
 public:
     // Init
-    MPU9250(SPI_HandleTypeDef *pSPI, uint8_t gFSR, uint8_t aFSR);
+    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR);
 
     // Functions
     uint8_t begin();
