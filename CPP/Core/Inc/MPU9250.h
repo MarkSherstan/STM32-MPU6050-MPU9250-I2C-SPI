@@ -51,8 +51,8 @@ class MPU9250
 {
 private:
     // Functions
-    // void REG_READ(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t addr, uint8_t *pRxData, uint16_t RxSize);
-    // void REG_WRITE(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t *pAddr, uint8_t *pVal);
+    void REG_READ(uint8_t addr, uint8_t *pRxData, uint16_t RxSize);
+    void REG_WRITE(uint8_t *pAddr, uint8_t *pVal);
     // void setGyroFullScaleRange(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t gScale);
     // void setAccFullScaleRange(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint8_t aScale);
     void toggleCS();
