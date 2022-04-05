@@ -30,6 +30,28 @@
 #define CS_DESELECT 1
 #define SPI_TIMOUT_MS 1000
 
+// Structs
+struct RawData
+{
+    int16_t ax, ay, az, gx, gy, gz;
+};
+
+struct ProcessedData
+{
+    float ax, ay, az, gx, gy, gz;
+};
+
+struct GyroCal
+{
+    float x, y, z;
+};
+
+struct Attitude
+{
+    float tau, dt;
+    float r, p, y;
+};
+
 // Full scale ranges
 enum gyroscopeFullScaleRange
 {
@@ -63,6 +85,9 @@ private:
     GPIO_TypeDef* _pCSport;
     uint8_t _aFSR, _gFSR;
     uint16_t _CSpin;
+    
+    // Structs
+    GyroCal gyroCal;
 
 public:
     // Init
@@ -70,10 +95,11 @@ public:
 
     // Functions
     uint8_t begin();
-    // void alibrateGyro(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250, uint16_t numCalPoints);
+    void calibrateGyro(uint16_t numCalPoints);
+    RawData readRawData();
     // void readProcessedData(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250);
     // void calcAttitude(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250);
-    // void readRawData(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250);
+    
 };
 
 #endif /* SRC_MPU9250_H_ */

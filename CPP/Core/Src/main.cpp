@@ -94,6 +94,7 @@ int main(void)
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
   imu.begin();
+  imu.calibrateGyro(1500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
