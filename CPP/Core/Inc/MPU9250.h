@@ -53,8 +53,8 @@ private:
     // Functions
     void REG_READ(uint8_t addr, uint8_t *pRxData, uint16_t RxSize);
     void REG_WRITE(uint8_t *pAddr, uint8_t *pVal);
-    void setGyroFullScaleRange(uint8_t aFSR);
-    void setAccFullScaleRange(uint8_t gFSR);
+    void setGyroFullScaleRange(uint8_t gFSR);
+    void setAccFullScaleRange(uint8_t aFSR);
     void toggleCS();
 
     // Variables

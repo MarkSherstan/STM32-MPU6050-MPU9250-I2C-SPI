@@ -24,9 +24,32 @@ MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin,
 
 uint8_t MPU9250::begin()
 {
-    setGyroFullScaleRange(_gFSR);
-    setAccFullScaleRange(_aFSR);
-    return 0;
+    // Initialize variables
+    uint8_t check, addr, val;
+
+    // Confirm device
+    REG_READ(WHO_AM_I, &check, 1);
+    if (check == WHO_AM_I_9250_ANS)
+    {
+        // Startup / reset the sensor
+        addr = PWR_MGMT_1;
+        val = 0x00;
+        REG_WRITE(&addr, &val);
+
+        // Disable I2C (SPI only)
+        addr = USER_CTRL;
+        val = 0x10;
+        REG_WRITE(&addr, &val);
+
+        // Set the full scale ranges
+        setGyroFullScaleRange(_gFSR);
+        setAccFullScaleRange(_aFSR);
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 /// @brief Toggle CS state to either start or end transmissions (default = high)
@@ -61,14 +84,14 @@ void MPU9250::REG_READ(uint8_t addr, uint8_t *pRxData, uint16_t RxSize)
 
 /// @brief Set the gyroscope full scale range
 /// @param gFSR Set 0 for ±250°/s, 1 for ±500°/s, 2 for ±1000°/s, and 3 for ±2000°/s
-void MPU9250::setGyroFullScaleRange(uint8_t gScale)
+void MPU9250::setGyroFullScaleRange(uint8_t gFSR)
 {
     // Variable init
     uint8_t addr = GYRO_CONFIG;
     uint8_t val;
 
     // Set the value
-    switch (gScale)
+    switch (gFSR)
     {
     case GFSR_250DPS:
         gScaleFactor = 131.0;
@@ -100,14 +123,14 @@ void MPU9250::setGyroFullScaleRange(uint8_t gScale)
 
 /// @brief Set the accelerometer full scale range
 /// @param aFSR Set 0 for ±2g, 1 for ±4g, 2 for ±8g, and 3 for ±16g
-void MPU9250::setAccFullScaleRange(uint8_t aScale)
+void MPU9250::setAccFullScaleRange(uint8_t aFSR)
 {
     // Variable init
     uint8_t addr = ACCEL_CONFIG;
     uint8_t val;
 
     // Set the value
-    switch (aScale)
+    switch (aFSR)
     {
     case AFSR_2G:
         aScaleFactor = 16384.0;
