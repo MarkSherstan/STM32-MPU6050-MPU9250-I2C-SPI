@@ -88,6 +88,7 @@ private:
     
     // Structs
     GyroCal gyroCal;
+    Attitude attitude;
 
 public:
     // Init
@@ -98,10 +99,7 @@ public:
     ProcessedData processData();
     Attitude calcAttitude();
     RawData readRawData();
-    uint8_t begin();
-
-    // Structs
-    Attitude attitude;
+    uint8_t begin();    
 };
 
 #endif /* SRC_MPU9250_H_ */

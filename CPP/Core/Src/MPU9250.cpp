@@ -169,29 +169,6 @@ void MPU9250::setAccFullScaleRange(uint8_t aFSR)
     }
 }
 
-/// @brief Read raw data from IMU
-RawData MPU9250::readRawData()
-{
-    // Data out and buffer init
-    RawData rawData;
-    uint8_t buf[14];
-
-    // Subroutine for reading the raw data
-    REG_READ(ACCEL_XOUT_H, &buf[0], 14);
-
-    // Bit shift the data
-    rawData.ax = buf[0] << 8 | buf[1];
-    rawData.ay = buf[2] << 8 | buf[3];
-    rawData.az = buf[4] << 8 | buf[5];
-    // temperature = buf[6] << 8 | buf[7];
-    rawData.gx = buf[8] << 8 | buf[9];
-    rawData.gy = buf[10] << 8 | buf[11];
-    rawData.gz = buf[12] << 8 | buf[13];
-
-    // Result 
-    return rawData;
-}
-
 /// @brief Find offsets for each axis of gyroscope
 void MPU9250::calibrateGyro(uint16_t numCalPoints)
 {
@@ -223,7 +200,32 @@ void MPU9250::calibrateGyro(uint16_t numCalPoints)
     gyroCal.z = (float)z / (float)numCalPoints;
 }
 
-/// @brief Calculate the processed real world sensor values
+/// @brief Read raw data from IMU
+/// @return Structure containing raw accelerometer and gyroscope data
+RawData MPU9250::readRawData()
+{
+    // Data out and buffer init
+    RawData rawData;
+    uint8_t buf[14];
+
+    // Subroutine for reading the raw data
+    REG_READ(ACCEL_XOUT_H, &buf[0], 14);
+
+    // Bit shift the data
+    rawData.ax = buf[0] << 8 | buf[1];
+    rawData.ay = buf[2] << 8 | buf[3];
+    rawData.az = buf[4] << 8 | buf[5];
+    // temperature = buf[6] << 8 | buf[7];
+    rawData.gx = buf[8] << 8 | buf[9];
+    rawData.gy = buf[10] << 8 | buf[11];
+    rawData.gz = buf[12] << 8 | buf[13];
+
+    // Result 
+    return rawData;
+}
+
+/// @brief Process the raw data into real world sensor values
+/// @return Structure containing processed accelerometer and gyroscope data
 ProcessedData MPU9250::processData()
 {
     // Data out structure  
@@ -252,6 +254,7 @@ ProcessedData MPU9250::processData()
 }
 
 /// @brief Calculate the attitude of the sensor in degrees using a complementary filter
+/// @return Structure containing sensor attitude data
 Attitude MPU9250::calcAttitude()
 {
     // Read processed data
