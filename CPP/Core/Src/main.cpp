@@ -94,7 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_SPI1_Init();
-  // MX_TIM11_Init();
+  MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
   // Check if IMU configured properly and block if it didn't
@@ -110,21 +110,19 @@ int main(void)
   HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
   imu.calibrateGyro(1500);
 
+  // Start timer and put processor into an efficient low power mode
+  HAL_TIM_Base_Start_IT(&htim11);
+  HAL_PWR_EnableSleepOnExit();
+  HAL_PWR_EnterSLEEPMode(PWR_MAINREGULATOR_ON, PWR_SLEEPENTRY_WFI);
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
+  // while (1)
+  // {
     /* USER CODE END WHILE */
-    HAL_Delay(4);
-
-    attitude = imu.calcAttitude();
-    sprintf((char *)serialBuf, "%.1f,%.1f,%.1f\r\n", attitude.r, attitude.p, attitude.y);
-    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
-
     /* USER CODE BEGIN 3 */
-  }
+  // }
   /* USER CODE END 3 */
 }
 
@@ -173,7 +171,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  // Callback, timer has rolled over
+  if (htim == &htim11)
+  {
+    HAL_ResumeTick();
 
+    attitude = imu.calcAttitude();
+    sprintf((char *)serialBuf, "%.1f,%.1f,%.1f\r\n", attitude.r, attitude.p, attitude.y);
+    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+ 
+    HAL_SuspendTick();
+  }
+}
 /* USER CODE END 4 */
 
 /**
