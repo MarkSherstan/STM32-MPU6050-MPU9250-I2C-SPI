@@ -95,7 +95,7 @@ public:
 
     // Functions
     void calibrateGyro(uint16_t numCalPoints);
-    ProcessedData readProcessedData();
+    ProcessedData processData();
     Attitude calcAttitude();
     RawData readRawData();
     uint8_t begin();

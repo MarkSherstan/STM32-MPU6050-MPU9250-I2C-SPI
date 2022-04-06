@@ -26,6 +26,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "MPU9250.h"
+#include "string.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,7 +49,7 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t serialBuf[100];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,8 +95,20 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
-  imu.begin();
+
+  // Check if IMU configured properly and block if it didn't
+  if (imu.begin() != TRUE)
+  {
+    sprintf((char *)serialBuf, "ERROR!\r\n");
+    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+    while (1){}
+  }
+
+  // Calibrate the IMU
+  sprintf((char *)serialBuf, "CALIBRATING...\r\n");
+  HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
   imu.calibrateGyro(1500);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -102,7 +116,8 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    HAL_Delay(4);
+    imu.calcAttitude();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */

@@ -224,7 +224,7 @@ void MPU9250::calibrateGyro(uint16_t numCalPoints)
 }
 
 /// @brief Calculate the processed real world sensor values
-ProcessedData MPU9250::readProcessedData()
+ProcessedData MPU9250::processData()
 {
     // Data out structure  
     ProcessedData processedData;
@@ -255,7 +255,7 @@ ProcessedData MPU9250::readProcessedData()
 Attitude MPU9250::calcAttitude()
 {
     // Read processed data
-    ProcessedData sensorData = readProcessedData();
+    ProcessedData sensorData = processData();
 
     // Complementary filter
     float accelPitch = atan2(sensorData.ay, sensorData.az) * RAD2DEG;
