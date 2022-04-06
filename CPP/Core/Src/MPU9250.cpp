@@ -13,13 +13,15 @@
 /// @param CSpin GPIO pin number of CS pin
 /// @param aFSR Accelerometer full scale range 
 /// @param gFSR Gyroscope full scale range
-MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR)
+MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR, float tau, float dt)
 {
     _pSPI = pSPI;
     _aFSR = aFSR;
     _gFSR = gFSR;
     _pCSport = pCSport;
     _CSpin = CSpin;
+    _tau = tau;
+    _dt = dt;
 }
 
 /// @brief Boot up the IMU and ensure we have a valid connection
@@ -28,6 +30,11 @@ uint8_t MPU9250::begin()
 {
     // Initialize variables
     uint8_t check, addr, val;
+
+    // Set attitude to zero conditions
+    attitude.r = 0;
+    attitude.p = 0;
+    attitude.y = 0;
 
     // Confirm device
     REG_READ(WHO_AM_I, &check, 1);
@@ -214,4 +221,50 @@ void MPU9250::calibrateGyro(uint16_t numCalPoints)
     gyroCal.x = (float)x / (float)numCalPoints;
     gyroCal.y = (float)y / (float)numCalPoints;
     gyroCal.z = (float)z / (float)numCalPoints;
+}
+
+/// @brief Calculate the processed real world sensor values
+ProcessedData MPU9250::readProcessedData()
+{
+    // Data out structure  
+    ProcessedData processedData;
+
+    // Get raw values from the IMU
+    RawData rawData = readRawData();
+
+    // Convert accelerometer values to g's
+    processedData.ax = rawData.ax / aScaleFactor;
+    processedData.ay = rawData.ay / aScaleFactor;
+    processedData.az = rawData.az / aScaleFactor;
+
+    // Compensate for gyro offset
+    processedData.gx = rawData.gx - gyroCal.x;
+    processedData.gy = rawData.gy - gyroCal.y;
+    processedData.gz = rawData.gz - gyroCal.z;
+
+    // Convert gyro values to deg/s
+    processedData.gx /= gScaleFactor;
+    processedData.gy /= gScaleFactor;
+    processedData.gz /= gScaleFactor;
+
+    // Return structure
+    return processedData;
+}
+
+/// @brief Calculate the attitude of the sensor in degrees using a complementary filter
+Attitude MPU9250::calcAttitude()
+{
+    // Read processed data
+    ProcessedData sensorData = readProcessedData();
+
+    // Complementary filter
+    float accelPitch = atan2(sensorData.ay, sensorData.az) * RAD2DEG;
+    float accelRoll = atan2(sensorData.ax, sensorData.az) * RAD2DEG;
+
+    attitude.r = _tau * (attitude.r - sensorData.gy * _dt) + (1 - _tau) * accelRoll;
+    attitude.p = _tau * (attitude.p - sensorData.gx * _dt) + (1 - _tau) * accelPitch;
+    attitude.y += (sensorData.gz * _dt);
+
+    // Return
+    return attitude;
 }

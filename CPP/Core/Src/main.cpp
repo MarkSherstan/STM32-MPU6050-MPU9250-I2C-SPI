@@ -58,7 +58,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-MPU9250 imu(&hspi1, GPIOB, GPIO_PIN_6, GFSR_500DPS, AFSR_4G);
+MPU9250 imu(&hspi1, GPIOB, GPIO_PIN_6, GFSR_500DPS, AFSR_4G, 0.98, 0.004);
 /* USER CODE END 0 */
 
 /**

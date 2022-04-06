@@ -48,7 +48,6 @@ struct GyroCal
 
 struct Attitude
 {
-    float tau, dt;
     float r, p, y;
 };
 
@@ -85,21 +84,24 @@ private:
     GPIO_TypeDef* _pCSport;
     uint8_t _aFSR, _gFSR;
     uint16_t _CSpin;
+    float _tau, _dt;
     
     // Structs
     GyroCal gyroCal;
 
 public:
     // Init
-    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR);
+    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR, float tau, float dt);
 
     // Functions
-    uint8_t begin();
     void calibrateGyro(uint16_t numCalPoints);
+    ProcessedData readProcessedData();
+    Attitude calcAttitude();
     RawData readRawData();
-    // void readProcessedData(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250);
-    // void calcAttitude(SPI_HandleTypeDef *SPIx, MPU9250_t *pMPU9250);
-    
+    uint8_t begin();
+
+    // Structs
+    Attitude attitude;
 };
 
 #endif /* SRC_MPU9250_H_ */
