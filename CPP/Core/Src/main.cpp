@@ -50,6 +50,7 @@
 
 /* USER CODE BEGIN PV */
 uint8_t serialBuf[100];
+Attitude attitude;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -93,7 +94,7 @@ int main(void)
   MX_GPIO_Init();
   MX_USART2_UART_Init();
   MX_SPI1_Init();
-  MX_TIM11_Init();
+  // MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
 
   // Check if IMU configured properly and block if it didn't
@@ -117,7 +118,11 @@ int main(void)
   {
     /* USER CODE END WHILE */
     HAL_Delay(4);
-    imu.calcAttitude();
+
+    attitude = imu.calcAttitude();
+    sprintf((char *)serialBuf, "%.1f,%.1f,%.1f\r\n", attitude.r, attitude.p, attitude.y);
+    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
