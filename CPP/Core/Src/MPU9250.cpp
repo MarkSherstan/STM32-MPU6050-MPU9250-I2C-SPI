@@ -11,17 +11,11 @@
 /// @param pSPI Pointer to SPI structure config
 /// @param pCSport Pointer to GPIO CS port
 /// @param CSpin GPIO pin number of CS pin
-/// @param aFSR Accelerometer full scale range 
-/// @param gFSR Gyroscope full scale range
-MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR, float tau, float dt)
+MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin)
 {
     _pSPI = pSPI;
-    _aFSR = aFSR;
-    _gFSR = gFSR;
     _pCSport = pCSport;
     _CSpin = CSpin;
-    _tau = tau;
-    _dt = dt;
 }
 
 /// @brief Boot up the IMU and ensure we have a valid connection
@@ -51,14 +45,42 @@ uint8_t MPU9250::begin()
         REG_WRITE(&addr, &val);
 
         // Set the full scale ranges
-        setGyroFullScaleRange(_gFSR);
-        setAccFullScaleRange(_aFSR);
+        writeGyroFullScaleRange(_gFSR);
+        writeAccFullScaleRange(_aFSR);
         return 1;
     }
     else
     {
         return 0;
     }
+}
+
+/// @brief Set the gyroscope full scale range 
+/// @param gFSR Desired yroscope full scale range
+void MPU9250::setGyroFullScaleRange(uint8_t gFSR)
+{
+    _gFSR = gFSR;
+}
+
+/// @brief Set the accelerometer full scale range 
+/// @param aFSR Desired accelerometer full scale range 
+void MPU9250::setAccFullScaleRange(uint8_t aFSR)
+{
+    _aFSR = aFSR;
+}
+
+/// @brief Set the sampling duration (delta time) in seconds
+/// @param dt Sampling time delta in seconds
+void MPU9250::setDeltaTime(float dt)
+{
+    _dt = dt;
+}
+
+/// @brief Time constant of the complementary filter
+/// @param tau Time constant
+void MPU9250::setTau(float tau)
+{
+    _tau = tau;
 }
 
 /// @brief Toggle CS state to either start or end transmissions (default = high)
@@ -93,7 +115,7 @@ void MPU9250::REG_READ(uint8_t addr, uint8_t *pRxData, uint16_t RxSize)
 
 /// @brief Set the gyroscope full scale range
 /// @param gFSR Set 0 for ±250°/s, 1 for ±500°/s, 2 for ±1000°/s, and 3 for ±2000°/s
-void MPU9250::setGyroFullScaleRange(uint8_t gFSR)
+void MPU9250::writeGyroFullScaleRange(uint8_t gFSR)
 {
     // Variable init
     uint8_t addr = GYRO_CONFIG;
@@ -132,7 +154,7 @@ void MPU9250::setGyroFullScaleRange(uint8_t gFSR)
 
 /// @brief Set the accelerometer full scale range
 /// @param aFSR Set 0 for ±2g, 1 for ±4g, 2 for ±8g, and 3 for ±16g
-void MPU9250::setAccFullScaleRange(uint8_t aFSR)
+void MPU9250::writeAccFullScaleRange(uint8_t aFSR)
 {
     // Variable init
     uint8_t addr = ACCEL_CONFIG;

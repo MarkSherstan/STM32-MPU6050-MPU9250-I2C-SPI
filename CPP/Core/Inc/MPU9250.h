@@ -74,32 +74,41 @@ private:
     // Functions
     void REG_READ(uint8_t addr, uint8_t *pRxData, uint16_t RxSize);
     void REG_WRITE(uint8_t *pAddr, uint8_t *pVal);
-    void setGyroFullScaleRange(uint8_t gFSR);
-    void setAccFullScaleRange(uint8_t aFSR);
+    void writeGyroFullScaleRange(uint8_t gFSR);
+    void writeAccFullScaleRange(uint8_t aFSR);
     void toggleCS();
 
     // Variables
     float aScaleFactor, gScaleFactor;
     SPI_HandleTypeDef* _pSPI;
     GPIO_TypeDef* _pCSport;
-    uint8_t _aFSR, _gFSR;
     uint16_t _CSpin;
-    float _tau, _dt;
-    
+
+    // Default values
+    uint8_t _gFSR = GFSR_500DPS;
+    uint8_t _aFSR = AFSR_4G;
+    float _tau = 0.98;
+    float _dt = 0.004;
+
     // Structs
     GyroCal gyroCal;
     Attitude attitude;
 
 public:
     // Init
-    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin, uint8_t aFSR, uint8_t gFSR, float tau, float dt);
+    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin);
 
     // Functions
     void calibrateGyro(uint16_t numCalPoints);
     ProcessedData processData();
     Attitude calcAttitude();
     RawData readRawData();
-    uint8_t begin();    
+    uint8_t begin();
+
+    void setGyroFullScaleRange(uint8_t gFSR);
+    void setAccFullScaleRange(uint8_t aFSR);
+    void setDeltaTime(float dt);
+    void setTau(float tau);
 };
 
 #endif /* SRC_MPU9250_H_ */

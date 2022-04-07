@@ -61,7 +61,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-MPU9250 imu(&hspi1, GPIOB, GPIO_PIN_6, GFSR_500DPS, AFSR_4G, 0.98, 0.004);
+MPU9250 imu(&hspi1, GPIOB, GPIO_PIN_6);
 /* USER CODE END 0 */
 
 /**
@@ -96,6 +96,11 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM11_Init();
   /* USER CODE BEGIN 2 */
+  // Configure IMU
+  imu.setGyroFullScaleRange(GFSR_500DPS);
+  imu.setAccFullScaleRange(AFSR_4G);
+  imu.setDeltaTime(0.004);
+  imu.setTau(0.98);
 
   // Check if IMU configured properly and block if it didn't
   if (imu.begin() != TRUE)
