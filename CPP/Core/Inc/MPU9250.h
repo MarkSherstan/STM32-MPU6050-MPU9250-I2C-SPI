@@ -80,8 +80,8 @@ private:
 
     // Variables
     float aScaleFactor, gScaleFactor;
-    SPI_HandleTypeDef* _pSPI;
-    GPIO_TypeDef* _pCSport;
+    SPI_HandleTypeDef *_pSPI;
+    GPIO_TypeDef *_pCSport;
     uint16_t _CSpin;
 
     // Default values
@@ -96,7 +96,7 @@ private:
 
 public:
     // Init
-    MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin);
+    MPU9250(SPI_HandleTypeDef *pSPI, GPIO_TypeDef *pCSport, uint16_t CSpin);
 
     // Functions
     void calibrateGyro(uint16_t numCalPoints);

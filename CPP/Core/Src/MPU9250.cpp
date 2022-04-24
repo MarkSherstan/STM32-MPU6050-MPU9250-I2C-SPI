@@ -11,7 +11,7 @@
 /// @param pSPI Pointer to SPI structure config
 /// @param pCSport Pointer to GPIO CS port
 /// @param CSpin GPIO pin number of CS pin
-MPU9250::MPU9250(SPI_HandleTypeDef* pSPI, GPIO_TypeDef* pCSport, uint16_t CSpin)
+MPU9250::MPU9250(SPI_HandleTypeDef *pSPI, GPIO_TypeDef *pCSport, uint16_t CSpin)
 {
     _pSPI = pSPI;
     _pCSport = pCSport;
@@ -55,15 +55,15 @@ uint8_t MPU9250::begin()
     }
 }
 
-/// @brief Set the gyroscope full scale range 
+/// @brief Set the gyroscope full scale range
 /// @param gFSR Desired yroscope full scale range
 void MPU9250::setGyroFullScaleRange(uint8_t gFSR)
 {
     _gFSR = gFSR;
 }
 
-/// @brief Set the accelerometer full scale range 
-/// @param aFSR Desired accelerometer full scale range 
+/// @brief Set the accelerometer full scale range
+/// @param aFSR Desired accelerometer full scale range
 void MPU9250::setAccFullScaleRange(uint8_t aFSR)
 {
     _aFSR = aFSR;
@@ -242,7 +242,7 @@ RawData MPU9250::readRawData()
     rawData.gy = buf[10] << 8 | buf[11];
     rawData.gz = buf[12] << 8 | buf[13];
 
-    // Result 
+    // Result
     return rawData;
 }
 
@@ -250,7 +250,7 @@ RawData MPU9250::readRawData()
 /// @return Structure containing processed accelerometer and gyroscope data
 ProcessedData MPU9250::processData()
 {
-    // Data out structure  
+    // Data out structure
     ProcessedData processedData;
 
     // Get raw values from the IMU
