@@ -17,18 +17,17 @@
 #define RAD2DEG 57.2957795131
 
 // Defines
-#define USER_CTRL 0x6A
-#define PWR_MGMT_1 0x6B
-#define GYRO_CONFIG 0x1B
-#define ACCEL_CONFIG 0x1C
-#define ACCEL_XOUT_H 0x3B
-#define WHO_AM_I 0x75
 #define WHO_AM_I_9250_ANS 0x71
-
-#define READWRITE 0x80
-#define CS_SELECT 0
-#define CS_DESELECT 1
-#define SPI_TIMOUT_MS 1000
+#define WHO_AM_I          0x75
+#define USER_CTRL         0x6A
+#define PWR_MGMT_1        0x6B
+#define GYRO_CONFIG       0x1B
+#define ACCEL_CONFIG      0x1C
+#define ACCEL_XOUT_H      0x3B
+#define READWRITE         0x80
+#define CS_SELECT         0
+#define CS_DESELECT       1
+#define SPI_TIMOUT_MS     1000
 
 // Structs
 struct RawData
