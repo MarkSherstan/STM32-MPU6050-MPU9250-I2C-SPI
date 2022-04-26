@@ -7,7 +7,7 @@
 *.map
 *.su
 
-SPI/Release 
-SPI/Debug
+C/SPI/Release 
+C/SPI/Debug
 CPP/SPI/Release
 CPP/SPI/Debug
