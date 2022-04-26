@@ -9,5 +9,9 @@
 
 C/SPI/Release 
 C/SPI/Debug
+
+C/I2C/Release 
+C/I2C/Debug
+
 CPP/SPI/Release
 CPP/SPI/Debug
