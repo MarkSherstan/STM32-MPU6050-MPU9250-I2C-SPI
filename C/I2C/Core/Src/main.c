@@ -38,14 +38,11 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define TRUE  1
-#define FALSE 0
-
 #define LED_PIN   GPIO_PIN_5
 #define LED_PORT  GPIOA
 
-uint8_t serialBuf[100];
-
+#define TRUE  1
+#define FALSE 0
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -56,7 +53,7 @@ uint8_t serialBuf[100];
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t serialBuf[100];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
