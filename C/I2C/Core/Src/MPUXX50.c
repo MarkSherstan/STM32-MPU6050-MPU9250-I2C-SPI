@@ -36,8 +36,8 @@ uint8_t MPU_begin(I2C_HandleTypeDef *I2Cx, uint8_t addr, uint8_t aScale, uint8_t
         HAL_I2C_Mem_Write(I2Cx, _addr, PWR_MGMT_1, 1, &select, 1, I2C_TIMOUT_MS);
 
         // Set the full scale ranges
-        setAccFullScaleRange(I2Cx, aScale);
-        setGyroFullScaleRange(I2Cx, gScale);
+        MPU_writeAccFullScaleRange(I2Cx, aScale);
+        MPU_writeGyroFullScaleRange(I2Cx, gScale);
 
         return 1;
     }
@@ -50,7 +50,7 @@ uint8_t MPU_begin(I2C_HandleTypeDef *I2Cx, uint8_t addr, uint8_t aScale, uint8_t
 /// @brief Set the accelerometer full scale range.
 /// @param I2Cx Pointer to I2C structure config.
 /// @param aScale Set 0 for ±2g, 1 for ±4g, 2 for ±8g, and 3 for ±16g.
-void setAccFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t aScale)
+void MPU_writeAccFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t aScale)
 {
     // Variable init
     uint8_t select;
@@ -89,7 +89,7 @@ void setAccFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t aScale)
 /// @brief Set the gyroscope full scale range.
 /// @param I2Cx Pointer to I2C structure config.
 /// @param gScale Set 0 for ±250°/s, 1 for ±500°/s, 2 for ±1000°/s, and 3 for ±2000°/s.
-void setGyroFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t gScale)
+void MPU_writeGyroFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t gScale)
 {
     // Variable init
     uint8_t select;
@@ -127,7 +127,7 @@ void setGyroFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t gScale)
 
 /// @brief Read raw data from IMU.
 /// @param I2Cx Pointer to I2C structure config.
-void readRawData(I2C_HandleTypeDef *I2Cx)
+void MPU_readRawData(I2C_HandleTypeDef *I2Cx)
 {
     uint8_t buf[14];
 
@@ -163,7 +163,7 @@ void MPU_calibrateGyro(I2C_HandleTypeDef *I2Cx, uint16_t numCalPoints)
     // Save specified number of points
     for (uint16_t ii = 0; ii < numCalPoints; ii++)
     {
-        readRawData(I2Cx);
+        MPU_readRawData(I2Cx);
         x += rawData.gx;
         y += rawData.gy;
         z += rawData.gz;
@@ -178,10 +178,10 @@ void MPU_calibrateGyro(I2C_HandleTypeDef *I2Cx, uint16_t numCalPoints)
 
 /// @brief Calculate the real world sensor values.
 /// @param I2Cx Pointer to I2C structure config.
-void readProcessedData(I2C_HandleTypeDef *I2Cx)
+void MPU_readProcessedData(I2C_HandleTypeDef *I2Cx)
 {
     // Get raw values from the IMU
-    readRawData(I2Cx);
+    MPU_readRawData(I2Cx);
 
     // Convert accelerometer values to g's
     sensorData.ax = rawData.ax / aScaleFactor;
@@ -204,7 +204,7 @@ void readProcessedData(I2C_HandleTypeDef *I2Cx)
 void MPU_calcAttitude(I2C_HandleTypeDef *I2Cx)
 {
     // Read processed data
-    readProcessedData(I2Cx);
+    MPU_readProcessedData(I2Cx);
 
     // Complementary filter
     float accelPitch = atan2(sensorData.ay, sensorData.az) * RAD2DEG;
