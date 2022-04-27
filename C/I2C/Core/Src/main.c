@@ -107,7 +107,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // Check if IMU configured properly and block if it didn't
-  if (MPU_begin(&hi2c1, AD0_LOW, AFS_4G, GFS_500DPS, TAU, SAMPLE_RATE_S) == TRUE)
+  if (MPU_begin(&hi2c1, AD0_LOW, AFSR_4G, GFSR_500DPS, TAU, SAMPLE_RATE_S) == TRUE)
   {
     HAL_GPIO_WritePin(LED_PORT, LED_PIN, 1);
   }
