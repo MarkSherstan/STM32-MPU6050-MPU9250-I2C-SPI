@@ -1,7 +1,0 @@
-MPUXX50.c:16:9:MPU_begin	48	static
-MPUXX50.c:49:6:setAccFullScaleRange	40	static
-MPUXX50.c:87:6:setGyroFullScaleRange	40	static
-MPUXX50.c:124:6:readRawData	48	static
-MPUXX50.c:145:6:MPU_calibrateGyro	32	static
-MPUXX50.c:169:6:readProcessedData	16	static
-MPUXX50.c:192:6:MPU_calcAttitude	32	static
