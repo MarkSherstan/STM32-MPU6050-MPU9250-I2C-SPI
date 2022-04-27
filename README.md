@@ -3,27 +3,26 @@ Based on my original [library](https://github.com/MarkSherstan/MPU-6050-9250-I2C
 
 Example code uses the [Sparkfun 9250 breakout](https://www.sparkfun.com/products/retired/13762?_ga=2.119791887.628539036.1650944818-860039329.1650581197) and [Nucleo-F401RE dev board](https://www.st.com/en/evaluation-tools/nucleo-f401re.html).
 
-There are four options available.
+There are four examples available.
 * I2C using CPP
 * I2C using C
 * SPI using CPP (MPU9250 only)
 * SPI using C (MPU9250 only)
 
-The four examples are fundamentally the same with minor differences such as the use of data structures, printing methods, etc...
+The examples are fundamentally the same with minor differences such as the use of data structures, pointers, printing methods, etc...
 
 For just the libraries refer [here](https://github.com/MarkSherstan/MPU-6050-9250-I2C-CompFilter/tree/master/STM32).
 
 # Notes / Usage
-
-* Download [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) and create a new project based on hardware.
-* Select: Project Manager -> Code Generator -> Check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
-* Add desired header and source files into their respective `\Src` and `\Inc` directories.
-* Pass in arguments:
-- Hardware information (e.g. )
-- Gyroscope full scale range (default 500 deg/s)
-- Accelerometer full scale range (default 4 g)
-- Delta time (default 250 Hz (dt = 0.004) using a timer interrupt)
-- Time constant (default 0.98)
+* Download [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) and create a new project based on your hardware (or import the example projects if the same dev board is available). 
+* Select: Project Manager -> Code Generator -> Check: `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
+* Add provided desired header and source files into their respective `\Src` and `\Inc` directories.
+* Parameters required by library:
+    - Hardware information (e.g. hi2cX or hspiX)
+    - Gyroscope full scale range (default 500 deg/s)
+    - Accelerometer full scale range (default 4 g)
+    - Delta time (default 250 Hz | dt = 0.004 -> use a timer interrupt)
+    - Time constant (default 0.98)
 
 * The minimum functions required after initializing are: `begin()`, `calibrate()`, and `attitude()`
 * Data can be printed from a serial port by connecting to the hardware at 115200 baud
