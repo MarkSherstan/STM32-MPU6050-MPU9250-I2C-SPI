@@ -90,7 +90,7 @@ private:
 
 public:
     // Init
-	MPUXX50(I2C_HandleTypeDef *pI2Cx);
+    MPUXX50(I2C_HandleTypeDef *pI2Cx);
 
     // Functions
     void calibrateGyro(uint16_t numCalPoints);
