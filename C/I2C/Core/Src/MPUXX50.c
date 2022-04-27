@@ -129,6 +129,7 @@ void MPU_writeGyroFullScaleRange(I2C_HandleTypeDef *I2Cx, uint8_t gScale)
 /// @param I2Cx Pointer to I2C structure config.
 void MPU_readRawData(I2C_HandleTypeDef *I2Cx)
 {
+    // Init buffer
     uint8_t buf[14];
 
     // Subroutine for reading the raw data

@@ -41,13 +41,10 @@
 #define TRUE  1
 #define FALSE 0
 
-#define SAMPLE_RATE_S 0.004
-#define TAU 0.98
-
 #define LED_PIN   GPIO_PIN_5
 #define LED_PORT  GPIOA
 
-uint8_t serialBuf[25];
+uint8_t serialBuf[100];
 
 /* USER CODE END PD */
 
@@ -107,7 +104,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // Check if IMU configured properly and block if it didn't
-  if (MPU_begin(&hi2c1, AD0_LOW, AFSR_4G, GFSR_500DPS, TAU, SAMPLE_RATE_S) == TRUE)
+  if (MPU_begin(&hi2c1, AD0_LOW, AFSR_4G, GFSR_500DPS, 0.98, 0.004) == TRUE)
   {
     HAL_GPIO_WritePin(LED_PORT, LED_PIN, 1);
   }
@@ -125,7 +122,7 @@ int main(void)
   // Calibrate the IMU
   sprintf((char *)serialBuf, "CALIBRATING...\r\n");
   HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
-  MPU_calibrateGyro(&hi2c1, 2000);
+  MPU_calibrateGyro(&hi2c1, 1500);
 
   // Start timer and put processor into an efficient low power mode
   HAL_TIM_Base_Start_IT(&htim11);
