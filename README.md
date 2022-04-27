@@ -1,7 +1,7 @@
 # STM32-MPU6050-MPU9250-I2C-SPI
 Based on my original [library](https://github.com/MarkSherstan/MPU-6050-9250-I2C-CompFilter), the algorithms and IC communication has been ported for STM32 chips using HAL drivers. 
 
-Example code uses the [Sparkfun 9250 breakout](https://www.sparkfun.com/products/retired/13762?_ga=2.119791887.628539036.1650944818-860039329.1650581197) and [Nucleo-F401RE dev board](https://www.st.com/en/evaluation-tools/nucleo-f401re.html).
+Example code was tested with the [Sparkfun MPU9250 breakout board](https://www.sparkfun.com/products/retired/13762?_ga=2.119791887.628539036.1650944818-860039329.1650581197) and [Nucleo-F401RE dev board](https://www.st.com/en/evaluation-tools/nucleo-f401re.html).
 
 There are four examples available.
 * I2C using CPP
@@ -21,7 +21,7 @@ For just the libraries refer [here](https://github.com/MarkSherstan/MPU-6050-925
     - Hardware information (e.g. hi2cX or hspiX)
     - Gyroscope full scale range (default 500 deg/s)
     - Accelerometer full scale range (default 4 g)
-    - Delta time (default 250 Hz | dt = 0.004 -> use a timer interrupt)
+    - Delta time (default 0.004 s (250 Hz) -> use a timer interrupt)
     - Time constant (default 0.98)
 
 * The minimum functions required after initializing are: `begin()`, `calibrate()`, and `attitude()`
