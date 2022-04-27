@@ -11,6 +11,24 @@ There are four options available.
 
 The four examples are fundamentally the same with minor differences such as the use of data structures, printing methods, etc...
 
+For just the libraries refer [here](https://github.com/MarkSherstan/MPU-6050-9250-I2C-CompFilter/tree/master/STM32).
+
+# Notes / Usage
+
+* Download [STM32CubeIDE](https://www.st.com/en/development-tools/stm32cubeide.html) and create a new project based on hardware.
+* Select: Project Manager -> Code Generator -> Check `Generate peripheral initialization as a pair of '.c/.h' files per peripheral`.
+* Add desired header and source files into their respective `\Src` and `\Inc` directories.
+* Pass in arguments:
+- Hardware information (e.g. )
+- Gyroscope full scale range (default 500 deg/s)
+- Accelerometer full scale range (default 4 g)
+- Delta time (default 250 Hz (dt = 0.004) using a timer interrupt)
+- Time constant (default 0.98)
+
+* The minimum functions required after initializing are: `begin()`, `calibrate()`, and `attitude()`
+* Data can be printed from a serial port by connecting to the hardware at 115200 baud
+* Refer to examples for more information
+
 # Pinout
 Refer to the `.ioc` file and the pinout diagrams located [here](https://os.mbed.com/platforms/ST-Nucleo-F401RE/).
 
@@ -32,3 +50,7 @@ Refer to the `.ioc` file and the pinout diagrams located [here](https://os.mbed.
 | GND      	| GND         	|                              	        |
 | SDA      	| PB9 (SDA)     | 10 kohm pull-up limit freq to 100 KHz |
 | SCL      	| PB8 (SCL)     | 10 kohm pull-up limit freq to 100 KHz |
+
+# TODO
+* WHO_AM_I check failure values?
+* Code could use a little tidy (e.g. remove global variables, make it simpler to initialize, etc...)
