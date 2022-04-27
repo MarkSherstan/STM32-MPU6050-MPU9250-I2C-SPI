@@ -24,12 +24,16 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "MPUXX50.h"
+#include "string.h"
+#include "stdio.h"
 
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 /* USER CODE BEGIN PTD */
-
+#define TRUE  1
+#define FALSE 0
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
@@ -44,7 +48,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+uint8_t serialBuf[100];
+Attitude attitude;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -55,7 +60,7 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+MPUXX50 imu(&hi2c1, AD0_LOW);
 /* USER CODE END 0 */
 
 /**
@@ -89,7 +94,24 @@ int main(void)
   MX_USART2_UART_Init();
   MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
+  // Configure IMU
+  imu.setGyroFullScaleRange(GFSR_500DPS);
+  imu.setAccFullScaleRange(AFSR_4G);
+  imu.setDeltaTime(0.004);
+  imu.setTau(0.98);
 
+  // Check if IMU configured properly and block if it didn't
+  if (imu.begin() != TRUE)
+  {
+    sprintf((char *)serialBuf, "ERROR!\r\n");
+    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+    while (1){}
+  }
+
+  // Calibrate the IMU
+  sprintf((char *)serialBuf, "CALIBRATING...\r\n");
+  HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+  imu.calibrateGyro(1500);
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -97,7 +119,11 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-
+    attitude = imu.calcAttitude();
+    sprintf((char *)serialBuf, "%.1f,%.1f,%.1f\r\n", attitude.r, attitude.p, attitude.y);
+    HAL_UART_Transmit(&huart2, serialBuf, strlen((char *)serialBuf), HAL_MAX_DELAY);
+ 
+    HAL_Delay(4);
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
